@@ -1,0 +1,121 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+            integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+            crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+            integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+            crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <style>
+        #mapid {
+            height: 860px;
+        }
+    </style>
+
+</head>
+<body>
+  
+            <div id="mapid">
+
+            </div>
+
+
+            <script>
+
+                var mymap = L.map('mapid', {
+                    center: [38.9392248407919, 34.84912109375],
+                    zoom: 6,
+                    maxZoom: 20,
+                    minZoom: 6
+                });
+                    //.setView([41.00527, 28.97696], 8);
+            var circle = L.circle([41.00530, 28.97690], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: 500
+            }).addTo(mymap);
+            var polygon = L.polygon([
+                [41.01630, 28.91690],
+                [41.00720, 28.93790],
+                [41.01220, 28.95890]
+                ]).addTo(mymap);
+                
+                //var marker = L.marker([41.01620, 28.9779]).addTo(mymap);
+                var marker = L.marker([35.189115, 26.012367],
+                    {
+                        draggable: true,        // Make the icon dragable
+                        title: 'Hover Text',     // Add a title
+                        opacity: 0.5
+                    }            // Adjust the opacity
+                ).addTo(mymap);
+            var marker = L.marker([42.113759, 44.232809]).addTo(mymap);
+             var marker = L.marker([38.9392248407919, 34.84912109375]).addTo(mymap);
+
+            marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
+            circle.bindPopup("I am a circle.");
+                polygon.bindPopup("I am a polygon.");
+              
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 18,
+                    preferCanvas: true,
+                    detectRetina: true,
+                    id: 'mapbox.satellite',
+                    accessToken: 'pk.eyJ1IjoiMTIwMnlhcmltYWdhIiwiYSI6ImNqb3M4ZGh5MDBhYmgza282YTk1dDAwMjkifQ.Kt_Q7o89zGJCMJ9n011iMw'
+                }).addTo(mymap);
+                L.Control.geocoder().addTo(mymap);
+                //var allowedBounds = L.LatLngBounds(
+                //    L.latLng(35.189115, 26.012367),
+                //    L.latLng(42.113759, 44.232809)
+                //);
+                var corner1 = L.latLng(35.189115, 26.012367),
+                    corner2 = L.latLng(42.113759, 44.232809),
+                    allowedBounds = L.latLngBounds(corner1, corner2);
+                var latlng = L.latLng(38.9392248407919, 34.84912109375);
+                var lastValidCenter;
+                lastValidCenter = latlng;
+
+                mymap.on('dragstart', function () {
+
+                    //posdetail.lastAdvID = 0;
+                    if (allowedBounds.contains(mymap.getCenter())) {
+                        lastValidCenter = mymap.getCenter();
+                        return;
+                    }
+                    mymap.panTo(L.latLng(25.189115, 16.012367));
+                });
+
+            var popup = L.popup();
+
+            function onMapClick(e) {
+                //popup
+                //    .setLatLng(e.latlng)
+                //    .setContent("You clicked the map at " + bounds.contains(mymap.getCenter()).toString())
+                //    .openOn(mymap);
+                mymap.flyToBounds(allowedBounds);
+            }
+
+                mymap.on('click', onMapClick);
+
+            </script>
+
+
+
+</body>
+</html>
